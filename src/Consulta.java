@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter;
  * Uso do @Copilot para gerar a base da documentação (revisada manualmente)
  */
 
-
 /**
  * Classe abstrata para representar uma consulta médica.
  * <p>
@@ -40,29 +39,29 @@ import java.time.format.DateTimeFormatter;
 public abstract class Consulta {
 
 	/** Nome do paciente associado à consulta. */
-	protected  String nomePaciente;
+	protected String nomePaciente;
 
 	/** Data e horário da consulta. */
-	protected  LocalDateTime horario;
+	protected LocalDateTime horario;
 
 	/** Especialidade médica da consulta. */
-	protected  EEspecialidade especialidade;
+	protected EEspecialidade especialidade;
 
 	/**
 	 * Cria uma consulta com paciente, horário e especialidade.
-	 *Se {@code hora} estiver no passado, ajusta para agora + 1 minuto.
-	 *Se {@code espec} for {@code null}, usa {@code EEspecialidade.ALERGOLOGIA}.
+	 * Se {@code hora} estiver no passado, ajusta para agora + 1 minuto.
+	 * Se {@code espec} for {@code null}, usa {@code EEspecialidade.ALERGOLOGIA}.
 	 *
 	 * @param paciente nome do paciente
-	 * @param hora data e horário desejados para a consulta
-	 * @param espec especialidade médica da consulta
+	 * @param hora     data e horário desejados para a consulta
+	 * @param espec    especialidade médica da consulta
 	 */
 	public Consulta(String paciente, LocalDateTime hora, EEspecialidade espec) {
-		if(paciente.length() == 0)
+		if (paciente.length() == 0)
 			paciente = "Anônimo";
-		if(hora.isBefore(LocalDateTime.now()))
+		if (hora.isBefore(LocalDateTime.now()))
 			hora = LocalDateTime.now().plusMinutes(1);
-		if(espec == null)
+		if (espec == null)
 			espec = EEspecialidade.ALERGOLOGIA;
 
 		nomePaciente = paciente;
@@ -87,12 +86,11 @@ public abstract class Consulta {
 	 */
 	public String toString() {
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/uu HH:mm");
-		return String.format("Consulta de %s para %s, marcada para %s: R$ %.2f", 
-							especialidade.name().toLowerCase(), 
-							nomePaciente, 
-							formatador.format(horario), 
-							valorConsulta()
-		);		
+		return String.format("Consulta de %s para %s, marcada para %s: R$ %.2f",
+				especialidade.name().toLowerCase(),
+				nomePaciente,
+				formatador.format(horario),
+				valorConsulta());
 	}
 
 	/**
@@ -102,8 +100,10 @@ public abstract class Consulta {
 	 * @return {@code true} se a consulta ocorrer na data informada;
 	 */
 	public boolean estahNoDia(LocalDate data) {
-		//TODO
-		return false;
+		LocalDate dia = LocalDate.from(data);
+		LocalDate diaHorarioMarcado = LocalDate.from(horario);
+
+		return dia.equals(diaHorarioMarcado);
 	}
 
 }

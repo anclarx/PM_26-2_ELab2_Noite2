@@ -29,9 +29,9 @@ import java.time.temporal.ChronoUnit;
  * Uso do @Copilot para gerar a base da documentação (revisada manualmente)
  */
 
-
 /**
  * Representa uma consulta agendada com antecedência.
+ * 
  * @see Consulta
  * @see EEspecialidade
  */
@@ -53,21 +53,26 @@ public class ConsultaAgendada extends Consulta {
 	 * Cria uma consulta agendada.
 	 * <p>
 	 * Se a data informada tiver antecedência inferior a
-	 * {@code ANTECEDENCIA_MINIMA} dias, o horário é ajustado para esta antecedência.
+	 * {@code ANTECEDENCIA_MINIMA} dias, o horário é ajustado para esta
+	 * antecedência.
 	 * 
 	 *
 	 * @param paciente nome do paciente
-	 * @param hora data e horário desejados para a consulta
-	 * @param espec especialidade médica da consulta
+	 * @param hora     data e horário desejados para a consulta
+	 * @param espec    especialidade médica da consulta
 	 */
 	public ConsultaAgendada(String paciente, LocalDateTime hora, EEspecialidade espec) {
 		LocalDate data = LocalDate.from(hora);
 		long dias = LocalDate.now().until(data, ChronoUnit.DAYS);
-		if(dias < ANTECEDENCIA_MINIMA)
+		if (dias < ANTECEDENCIA_MINIMA)
 			hora = LocalDateTime.now().plusDays(ANTECEDENCIA_MINIMA);
 		super(paciente, hora, espec);
-		
-		//TODO: calcular desconto, se for o caso.
+
+		// dia que eu agendei != hora/horario agendado
+		LocalDate diaQueFoiRealizadoAgendamento = LocalDate.now();
+		if (diaQueFoiRealizadoAgendamento.plusDays(ANTECEDENCIA_DESCONTO).isBefore(horario.toLocalDate())) {
+			valorDesconto = especialidade.valor() * PCT_DESCONTO;
+		}
 
 	}
 
@@ -81,6 +86,6 @@ public class ConsultaAgendada extends Consulta {
 	 * @return valor final da consulta, já descontado
 	 */
 	public double valorConsulta() {
-		return especialidade.valor() - valorDesconto;	
+		return especialidade.valor() - valorDesconto;
 	}
 }

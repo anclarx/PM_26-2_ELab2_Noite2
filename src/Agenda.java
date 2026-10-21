@@ -62,20 +62,27 @@ public class Agenda {
 	 * @return a quantidade total de consultas na agenda após a operação
 	 */
 	public int addConsulta(Consulta consulta) {
-		if(consulta != null)
+		if (consulta != null)
 			agenda.add(consulta);
-		return  agenda.size();
+		return agenda.size();
 	}
 
 	/**
 	 * Gera a descrição da agenda de um dia específico.
 	 *
 	 * @param dia o dia para o qual se deseja obter a agenda
-	 * @return uma {@code String} com as consultas do dia 
+	 * @return uma {@code String} com as consultas do dia
 	 */
 	public String agendaDoDia(LocalDate dia) {
-		//TODO
-		return "";
+		List<Consulta> consultasDia = new LinkedList<>();
+		String descricao = "";
+		for (Consulta consulta : agenda) {
+			if (consulta.estahNoDia(dia)) {
+				consultasDia.add(consulta);
+				descricao += consulta.toString();
+			}
+		}
+		return descricao;
 	}
 
 }

@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /** 
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 
 /**
  * Representa uma consulta de retorno, vinculada a uma consulta anterior.
+ * 
  * @see Consulta
  */
 public class ConsultaRetorno extends Consulta {
@@ -42,20 +44,25 @@ public class ConsultaRetorno extends Consulta {
 	/**
 	 * Cria uma consulta de retorno.
 	 * 
-	 * @param hora data e horário desejados para o retorno
+	 * @param hora     data e horário desejados para o retorno
 	 * @param original consulta original da qual este é o retorno
 	 */
 	public ConsultaRetorno(LocalDateTime hora, Consulta original) {
-		//TODO
-		super(null, null, null);
+		consultaAnterior = original;
+		super(original.nomePaciente, hora, original.especialidade);
 	}
 
 	/**
 	 * Calcula o valor da consulta de retorno.
+	 * 
 	 * @return valor da consulta de retorno (atualmente, {@code 0})
 	 */
 	public double valorConsulta() {
-		//TODO
+		LocalDate dataMaximaDesconto = consultaAnterior.horario.plusDays(INTERVALO_MAXIMO).toLocalDate();
+		LocalDate dataMarcada = horario.toLocalDate();
+		if (dataMaximaDesconto.isBefore(dataMarcada)) {
+			return especialidade.valor();
+		}
 		return 0;
 	}
 
