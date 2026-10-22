@@ -26,8 +26,8 @@ public class ConsultaAgendadaTest {
         // Arrange
         LocalDateTime horarioAgendado = LocalDateTime.of(2026, 11, 12, 9, 13);
         consulta = new ConsultaAgendada(nomePaciente, horarioAgendado, especialidade);
-        valorEsperado = especialidade.valor() * PCT_DESCONTO;
-
+        valorEsperado = especialidade.valor() - (especialidade.valor() * PCT_DESCONTO);
+        
         // Act
         valorConsulta = consulta.valorConsulta();
 
