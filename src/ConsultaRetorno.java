@@ -48,8 +48,8 @@ public class ConsultaRetorno extends Consulta {
 	 * @param original consulta original da qual este é o retorno
 	 */
 	public ConsultaRetorno(LocalDateTime hora, Consulta original) {
-		consultaAnterior = original;
 		super(original.nomePaciente, hora, original.especialidade);
+		consultaAnterior = original;
 	}
 
 	/**
@@ -58,12 +58,18 @@ public class ConsultaRetorno extends Consulta {
 	 * @return valor da consulta de retorno (atualmente, {@code 0})
 	 */
 	public double valorConsulta() {
-		LocalDate dataMaximaDesconto = consultaAnterior.horario.plusDays(INTERVALO_MAXIMO).toLocalDate();
-		LocalDate dataMarcada = horario.toLocalDate();
-		if (dataMaximaDesconto.isBefore(dataMarcada)) {
-			return especialidade.valor();
-		}
-		return 0;
-	}
+        if (consultaAnterior == null) {
+            return especialidade.valor();
+        }
+
+        LocalDate dataMaximaRetorno = consultaAnterior.horario.toLocalDate().plusDays(INTERVALO_MAXIMO);
+        LocalDate dataMarcada = horario.toLocalDate();
+
+        if (dataMarcada.isAfter(dataMaximaRetorno)) {
+            return especialidade.valor();
+        }
+
+        return 0.0;
+    }
 
 }
